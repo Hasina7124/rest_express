@@ -29,8 +29,17 @@ router.post('/', function(req, res) {
   try{
     const data = req.body;
     const {name, email, password} = data;
+    const dateNow = Date.now();
 
-    connection.query('INSERT INTO users (name, email, password) VALUES (?,?,?)', [name, email, password]);
+    let date_time = new Date(dateNow);
+    let date = date_time.getDate();
+    let month = date_time.getMonth() + 1;
+    let year = date_time.getFullYear();
+
+    // YYYY-MM-DD format
+    let date_formated = year + "-" + month + "-" + date;
+
+    connection.query('INSERT INTO users (name, email, password, created_at) VALUES (?,?,?,?)', [name, email, password, date_formated]);
 
     res.status(200).json({
       message: "user created successfully"
@@ -55,7 +64,17 @@ router.put('/update/:id', function(req, res) {
     const data = req.body;
     const {name, email, password} = req.body;
 
-    connection.query('UPDATE users set name = ?, email = ?, password = ? where id = ?', [name, email, password, id]);
+    const dateNow = Date.now();
+
+    let date_time = new Date(dateNow);
+    let date = date_time.getDate();
+    let month = date_time.getMonth() + 1;
+    let year = date_time.getFullYear();
+
+    // YYYY-MM-DD format
+    let date_formated = year + "-" + month + "-" + date;
+
+    connection.query('UPDATE users set name = ?, email = ?, password = ?, updated_at=? where id = ?', [name, email, password, date_formated,id]);
 
     res.status(200).json({message: "update successfully"});
   }catch(error){
